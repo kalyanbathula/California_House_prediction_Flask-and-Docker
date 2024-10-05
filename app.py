@@ -12,15 +12,14 @@ def home():
     return render_template('home.html')
 
 @app.route('/api/v1/predict',methods = ['POST'])
-
 def predict_api():
     data = request.json['data']
     print("Hello")
     print(data)
-    print(data.values())
-    return jsonify({
-        "message":"Hello"
-    })
+    print(np.array(list(data.values())).reshape(1,-1))
+    new_data = scalar.transform(np.array(list(data.values())).reshape(1,-1))
+    output = model.predict(new_data)
+    return jsonify(output[0])
 
 
 if __name__=="__main__":
